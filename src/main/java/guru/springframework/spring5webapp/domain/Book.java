@@ -1,6 +1,7 @@
 package guru.springframework.spring5webapp.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -9,18 +10,20 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String title;
+    private String isbn;
+
+    @ManyToOne
+    private Publisher publisher;
 
     @ManyToMany
     @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "book_id"),
     inverseJoinColumns = @JoinColumn(name = "author_id"))
-    private Set<Author> authors;
+    private Set<Author> authors = new HashSet<>();
 
-    public Book(String firstName, String lastName, Set<Author> authors) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.authors = authors;
+    public Book(String title, String isbn) {
+        this.title = title;
+        this.isbn = isbn;
     }
 
     public Book() {
@@ -34,38 +37,28 @@ public class Book {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getTitle() {
+        return title;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getIsbn() {
+        return isbn;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
-    public Set<Author> getAuthors() {
-        return authors;
+    public Publisher getPublisher() {
+        return publisher;
     }
 
-    public void setAuthors(Set<Author> authors) {
-        this.authors = authors;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", authors=" + authors +
-                '}';
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
     }
 
     @Override
@@ -81,5 +74,23 @@ public class Book {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", isbn='" + isbn + '\'' +
+                ", authors=" + authors +
+                '}';
+    }
+
+    public Set<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
     }
 }
